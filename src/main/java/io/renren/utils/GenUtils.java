@@ -28,18 +28,34 @@ import java.util.zip.ZipOutputStream;
  */
 public class GenUtils {
 
-    public static List<String> getTemplates(){
-        List<String> templates = new ArrayList<String>();
-        templates.add("template/Entity.java.vm");
-        templates.add("template/Dao.java.vm");
-        templates.add("template/Dao.xml.vm");
-        templates.add("template/Service.java.vm");
-        templates.add("template/ServiceImpl.java.vm");
-        templates.add("template/Controller.java.vm");
-        templates.add("template/list.html.vm");
-        templates.add("template/list.js.vm");
-        templates.add("template/menu.sql.vm");
+    private static final String DIR_TEMPLATE = "template";
+
+    /**
+     * 读取template下所有文件
+     *
+     * @return
+     */
+    public static List<String> getTemplates() {
+        List<String> templates = new ArrayList<>();
+        File tplDir = new File(GenUtils.class.getResource("/" + DIR_TEMPLATE).getPath());
+        if (tplDir.exists()) {
+            appendTemplate(tplDir, templates, DIR_TEMPLATE);
+        } else {
+            throw new RuntimeException("找不到template目录:" + DIR_TEMPLATE);
+        }
         return templates;
+    }
+
+    private static void appendTemplate(File tplDir, List<String> templates, String parentDir) {
+        String tmpPath;
+        for (File file : tplDir.listFiles()) {
+            tmpPath = parentDir + "/" + file.getName();
+            if (file.isDirectory()) {
+                appendTemplate(file, templates, tmpPath);
+            } else {
+                templates.add(tmpPath);
+            }
+        }
     }
 
     /**
@@ -209,10 +225,6 @@ public class GenUtils {
                     + "modules" + File.separator + moduleName + File.separator + className.toLowerCase() + ".js";
         }
 
-        if (template.contains("menu.sql.vm" )) {
-            return className.toLowerCase() + "_menu.sql";
-        }
-
-        return null;
+        return template.substring(0, template.length() - 3);
     }
 }
