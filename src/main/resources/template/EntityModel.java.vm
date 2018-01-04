@@ -1,6 +1,7 @@
-package ${package}.${moduleName};
+package ${package}.${moduleName}.model;
 
-import net.sinedu.company.bases.BasePojo;
+import ${package}.${moduleName}.${className};
+import net.sinedu.foundation.data.jpa.model.EntityModel;
 import java.util.Date;
 #if(${hasBigDecimal})
 import java.math.BigDecimal;
@@ -14,8 +15,11 @@ import java.math.BigDecimal;
  * @email ${email}
  * @date ${datetime}
  */
-public class ${className} extends BasePojo {
-	private static final long serialVersionUID = 1L;
+public class ${className}Model extends EntityModel<${className}> {
+
+    public ${className}Model(${className} entity) {
+        super(entity);
+    }
 
 #foreach ($column in $columns)
     /**

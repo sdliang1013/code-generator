@@ -1,8 +1,9 @@
 package ${package}.${moduleName}.dao;
 
-import ${package}.${moduleName}.entity.${className}Entity;
-import ${mainPath}.modules.sys.dao.BaseDao;
-import org.apache.ibatis.annotations.Mapper;
+import cn.easybuild.pojo.DataSet;
+import ${package}.${moduleName}.${className}QueryParam;
+import ${package}.${moduleName}.${className};
+import cn.easybuild.core.dao.StringPojoAppBaseDao;
 
 /**
  * ${comments}
@@ -11,7 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
  * @email ${email}
  * @date ${datetime}
  */
-@Mapper
-public interface ${className}Dao extends BaseDao<${className}Entity> {
-	
+public interface ${className}Dao extends StringPojoAppBaseDao<${className}> {
+
+    DataSet<${className}> query${className}ByParam(${className}QueryParam queryParam);
 }
