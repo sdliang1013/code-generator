@@ -165,8 +165,8 @@ public class GenUtils {
      * 表名转换成Java类名
      */
     public static String tableToJava(String tableName, String tablePrefix) {
-        if (StringUtils.isNotBlank(tablePrefix)) {
-            tableName = tableName.replace(tablePrefix, "");
+        if (StringUtils.isNotBlank(tablePrefix) && tableName.startsWith(tablePrefix)) {
+            tableName = tableName.replaceFirst(tablePrefix, "");
         }
         return columnToJava(tableName);
     }
@@ -186,52 +186,57 @@ public class GenUtils {
      * 获取文件名
      */
     public static String getFileName(String template, String className, String packageName, String moduleName) {
-        String packagePath = "main" + File.separator + "java" + File.separator;
+        //接口类目录
+        String apiRoot = "api" + File.separator + "main" + File.separator + "java" + File.separator;
+        //业务实现类目录
+        String serviceRoot = "service" + File.separator + "main" + File.separator + "java" + File.separator;
         if (StringUtils.isNotBlank(packageName)) {
-            packagePath += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator;
+            apiRoot += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator + className.toLowerCase() + File.separator;
+            serviceRoot += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator + className.toLowerCase() + File.separator;
         }
         //TODO:按照template的路径生成
         //entity
         if (template.contains("Entity.java.vm")) {
-            return packagePath + className + ".java";
+            return apiRoot + className + ".java";
         }
         if (template.contains("EntityModel.java.vm")) {
-            return packagePath + "model" + File.separator + className + "Model.java";
+            return serviceRoot + "model" + File.separator + className + "Model.java";
         }
         if (template.contains("QueryParam.java.vm")) {
-            return packagePath + className + "QueryParam.java";
+            return apiRoot + className + "QueryParam.java";
         }
         //dao
         if (template.contains("Dao.java.vm")) {
-            return packagePath + "dao" + File.separator + className + "Dao.java";
+            return serviceRoot + "dao" + File.separator + className + "Dao.java";
         }
 
         if (template.contains("DaoImpl.java.vm")) {
-            return packagePath + "dao" + File.separator + className + "DaoImpl.java";
+            return serviceRoot + "dao" + File.separator + className + "DaoImpl.java";
         }
         //service
         if (template.contains("Service.java.vm")) {
-            return packagePath + "service" + File.separator + className + "Service.java";
+            return apiRoot + "service" + File.separator + className + "Service.java";
         }
 
         if (template.contains("ServiceImpl.java.vm")) {
-            return packagePath + "service" + File.separator + className + "ServiceImpl.java";
+            return serviceRoot + "service" + File.separator + className + "ServiceImpl.java";
         }
         //resource
         if (template.contains("SpResource.java.vm")) {
-            return packagePath + "resource" + File.separator + className + "SpResource.java";
+            return serviceRoot + "resource" + File.separator + className + "SpResource.java";
         }
 
         if (template.contains("PosResource.java.vm")) {
-            return packagePath + "resource" + File.separator + className + "PosResource.java";
+            return serviceRoot + "resource" + File.separator + className + "PosResource.java";
         }
 
         if (template.contains("AppResource.java.vm")) {
-            return packagePath + "resource" + File.separator + className + "AppResource.java";
+            return serviceRoot + "resource" + File.separator + className + "AppResource.java";
         }
         //Mapper
         if (template.contains("Mapper.xml.vm")) {
-            return "main" + File.separator + "resources" + File.separator + "mybatis" + File.separator + "modules" + File.separator + moduleName + File.separator + "dao" + File.separator + className + "-mapper.xml";
+            return "service" + File.separator + "main" + File.separator + "resources" + File.separator + "mybatis" + File.separator + "modules"
+                    + File.separator + moduleName + File.separator + "dao" + File.separator + className.toLowerCase() + "-mapper.xml";
         }
 
         return template.substring(0, template.length() - 3);

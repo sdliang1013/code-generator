@@ -17,6 +17,8 @@ import java.math.BigDecimal;
  */
 public class ${className}Model extends EntityModel<${className}> {
 
+    public ${className}Model() {}
+
     public ${className}Model(${className} entity) {
         super(entity);
     }
