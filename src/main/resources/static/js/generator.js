@@ -52,12 +52,14 @@ var vm = new Vue({
         generator: function () {
             var tableNames = getSelectedRows();
             var pkg = $("#txt_pkg").val();
-            var module = $("#txt_module").val();
+            // var module = $("#txt_module").val();
             var tabPrefix = $("#txt_tab_prefix").val();
             if (tableNames == null) {
                 return;
             }
-            location.href = "sys/generator/code?pkg=" + pkg + "&module=" + module + "&tabPrefix=" + tabPrefix
+            location.href = "sys/generator/code?pkg=" + pkg
+                // + "&module=" + module
+                + "&tabPrefix=" + tabPrefix
                 + "&tables=" + JSON.stringify(tableNames);
         }
     }
