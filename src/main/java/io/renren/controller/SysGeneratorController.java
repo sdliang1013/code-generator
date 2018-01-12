@@ -20,7 +20,7 @@ import java.util.Map;
 
 /**
  * 代码生成器
- * 
+ *
  * @author chenshun
  * @email sunlightcs@gmail.com
  * @date 2016年12月19日 下午9:12:58
@@ -28,41 +28,43 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sys/generator")
 public class SysGeneratorController {
-	@Autowired
-	private SysGeneratorService sysGeneratorService;
-	
-	/**
-	 * 列表
-	 */
-	@ResponseBody
-	@RequestMapping("/list")
-	public R list(@RequestParam Map<String, Object> params){
-		//查询列表数据
-		Query query = new Query(params);
-		List<Map<String, Object>> list = sysGeneratorService.queryList(query);
-		int total = sysGeneratorService.queryTotal(query);
-		
-		PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage());
-		
-		return R.ok().put("page", pageUtil);
-	}
-	
-	/**
-	 * 生成代码
-	 */
-	@RequestMapping("/code")
-	public void code(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		String[] tableNames = new String[]{};
-		String tables = request.getParameter("tables");
-		tableNames = JSON.parseArray(tables).toArray(tableNames);
-		
-		byte[] data = sysGeneratorService.generatorCode(tableNames);
-		
-		response.reset();  
-        response.setHeader("Content-Disposition", "attachment; filename=\"renren.zip\"");  
-        response.addHeader("Content-Length", "" + data.length);  
-        response.setContentType("application/octet-stream; charset=UTF-8");  
-  
-        IOUtils.write(data, response.getOutputStream());  
-	}
+    @Autowired
+    private SysGeneratorService sysGeneratorService;
+
+    /**
+     * 列表
+     */
+    @ResponseBody
+    @RequestMapping("/list")
+    public R list(@RequestParam Map<String, Object> params) {
+        //查询列表数据
+        Query query = new Query(params);
+        List<Map<String, Object>> list = sysGeneratorService.queryList(query);
+        int total = sysGeneratorService.queryTotal(query);
+
+        PageUtils pageUtil = new PageUtils(list, total, query.getLimit(), query.getPage());
+
+        return R.ok().put("page", pageUtil);
+    }
+
+    /**
+     * 生成代码
+     */
+    @RequestMapping("/code")
+    public void code(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String[] tableNames = new String[]{};
+        String tables = request.getParameter("tables");
+        tableNames = JSON.parseArray(tables).toArray(tableNames);
+
+        byte[] data = sysGeneratorService.generatorCode(
+                request.getParameter("pkg"), request.getParameter("module"),
+                request.getParameter("tabPrefix"), tableNames);
+
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + tables + ".zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+
+        IOUtils.write(data, response.getOutputStream());
+    }
 }
