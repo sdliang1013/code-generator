@@ -56,7 +56,9 @@ public class SysGeneratorController {
         String tables = request.getParameter("tables");
         tableNames = JSON.parseArray(tables).toArray(tableNames);
 
-        byte[] data = sysGeneratorService.generatorCode(tableNames);
+        byte[] data = sysGeneratorService.generatorCode(
+                request.getParameter("pkg"), request.getParameter("module"),
+                request.getParameter("tabPrefix"), tableNames);
 
         response.reset();
         response.setHeader("Content-Disposition", "attachment; filename=\"" + tables + ".zip\"");

@@ -5,6 +5,7 @@ import io.renren.entity.TableEntity;
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -46,22 +47,18 @@ public class GenUtils {
         return templates;
     }
 
-    private static void appendTemplate(File tplDir, List<String> templates, String parentDir) {
-        String tmpPath;
-        for (File file : tplDir.listFiles()) {
-            tmpPath = parentDir + "/" + file.getName();
-            if (file.isDirectory()) {
-                appendTemplate(file, templates, tmpPath);
-            } else {
-                templates.add(tmpPath);
-            }
-        }
-    }
-
     /**
      * 生成代码
+     *
+     * @param packageName 包名
+     * @param modelName   模块名称
+     * @param tabPrefix   表名前缀
+     * @param table       表信息
+     * @param columns     列信息
+     * @param zip
      */
-    public static void generatorCode(Map<String, String> table,
+    public static void generatorCode(String packageName, String modelName,
+                                     String tabPrefix, Map<String, String> table,
                                      List<Map<String, String>> columns, ZipOutputStream zip) {
         //配置信息
         Configuration config = getConfig();
@@ -71,7 +68,8 @@ public class GenUtils {
         tableEntity.setTableName(table.get("tableName"));
         tableEntity.setComments(table.get("tableComment"));
         //表名转换成Java类名
-        String className = tableToJava(tableEntity.getTableName(), config.getString("tablePrefix"));
+        tabPrefix = StringUtils.isEmpty(tabPrefix) ? config.getString("tablePrefix") : tabPrefix;
+        String className = tableToJava(tableEntity.getTableName(), tabPrefix);
         tableEntity.setClassName(className);
         tableEntity.setClassname(StringUtils.uncapitalize(className));
 
@@ -115,6 +113,8 @@ public class GenUtils {
         Velocity.init(prop);
         String mainPath = config.getString("mainPath");
         mainPath = StringUtils.isBlank(mainPath) ? "io.renren" : mainPath;
+        packageName = StringUtils.isEmpty(packageName) ? config.getString("package") : packageName;
+        modelName = StringUtils.isEmpty(modelName) ? config.getString("moduleName") : modelName;
         //封装模板数据
         Map<String, Object> map = new HashMap<>();
         map.put("tableName", tableEntity.getTableName());
@@ -125,9 +125,11 @@ public class GenUtils {
         map.put("pathName", tableEntity.getClassname().toLowerCase());
         map.put("columns", tableEntity.getColumns());
         map.put("hasBigDecimal", hasBigDecimal);
+
+
         map.put("mainPath", mainPath);
-        map.put("package", config.getString("package"));
-        map.put("moduleName", config.getString("moduleName"));
+        map.put("package", packageName);
+        map.put("moduleName", modelName);
         map.put("author", config.getString("author"));
         map.put("email", config.getString("email"));
         map.put("datetime", DateUtils.format(new Date(), DateUtils.DATE_TIME_PATTERN));
@@ -143,7 +145,8 @@ public class GenUtils {
 
             try {
                 //添加到zip
-                zip.putNextEntry(new ZipEntry(getFileName(template, tableEntity.getClassName(), config.getString("package"), config.getString("moduleName"))));
+                zip.putNextEntry(new ZipEntry(
+                        getFileName(template, tableEntity.getClassName(), packageName, modelName)));
                 IOUtils.write(sw.toString(), zip, "UTF-8");
                 IOUtils.closeQuietly(sw);
                 zip.closeEntry();
@@ -186,59 +189,31 @@ public class GenUtils {
      * 获取文件名
      */
     public static String getFileName(String template, String className, String packageName, String moduleName) {
-        //接口类目录
-        String apiRoot = "api" + File.separator + "main" + File.separator + "java" + File.separator;
-        //业务实现类目录
-        String serviceRoot = "service" + File.separator + "main" + File.separator + "java" + File.separator;
-        if (StringUtils.isNotBlank(packageName)) {
-            apiRoot += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator + className.toLowerCase() + File.separator;
-            serviceRoot += packageName.replace(".", File.separator) + File.separator + moduleName + File.separator + className.toLowerCase() + File.separator;
-        }
-        //TODO:按照template的路径生成
-        //entity
-        if (template.contains("Entity.java.vm")) {
-            return apiRoot + className + ".java";
-        }
-        if (template.contains("EntityModel.java.vm")) {
-            return serviceRoot + "model" + File.separator + className + "Model.java";
-        }
-        if (template.contains("QueryParam.java.vm")) {
-            return apiRoot + className + "QueryParam.java";
-        }
-        //dao
-        if (template.contains("Dao.java.vm")) {
-            return serviceRoot + "dao" + File.separator + className + "Dao.java";
-        }
+        String basePath = FilenameUtils.getPath(template) + FilenameUtils.getBaseName(template);
+        String extension = FilenameUtils.getExtension(template);
+        return basePath.replace("${className}", className).
+                replace("${classname}", className.toLowerCase()).
+                replace("${package}", packageName).
+                replace("${moduleName}", moduleName).
+                replace(".", File.separator) + "." + extension;
+    }
 
-        if (template.contains("DaoImpl.java.vm")) {
-            return serviceRoot + "dao" + File.separator + className + "DaoImpl.java";
+    private static void appendTemplate(File tplDir, List<String> templates, String parentDir) {
+        String tmpPath;
+        for (File file : tplDir.listFiles()) {
+            tmpPath = parentDir + File.separatorChar + file.getName();
+            if (file.isDirectory()) {
+                appendTemplate(file, templates, tmpPath);
+            } else {
+                templates.add(tmpPath);
+            }
         }
-        //service
-        if (template.contains("Service.java.vm")) {
-            return apiRoot + "service" + File.separator + className + "Service.java";
-        }
+    }
 
-        if (template.contains("ServiceImpl.java.vm")) {
-            return serviceRoot + "service" + File.separator + className + "ServiceImpl.java";
-        }
-        //resource
-        if (template.contains("SpResource.java.vm")) {
-            return serviceRoot + "resource" + File.separator + className + "SpResource.java";
-        }
-
-        if (template.contains("PosResource.java.vm")) {
-            return serviceRoot + "resource" + File.separator + className + "PosResource.java";
-        }
-
-        if (template.contains("AppResource.java.vm")) {
-            return serviceRoot + "resource" + File.separator + className + "AppResource.java";
-        }
-        //Mapper
-        if (template.contains("Mapper.xml.vm")) {
-            return "service" + File.separator + "main" + File.separator + "resources" + File.separator + "mybatis" + File.separator + "modules"
-                    + File.separator + moduleName + File.separator + "dao" + File.separator + className.toLowerCase() + "-mapper.xml";
-        }
-
-        return template.substring(0, template.length() - 3);
+    public static void main(String[] args) {
+        String template = "template\\interface\\main\\java\\${package}.${moduleName}.${classname}\\${className}Entity.java";
+        System.out.println(FilenameUtils.getFullPathNoEndSeparator(template));
+        String fileName = getFileName(template, "ShopRole", "net.sinedu.company", "shop");
+        System.out.println(fileName);
     }
 }
