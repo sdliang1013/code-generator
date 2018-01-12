@@ -1,8 +1,8 @@
-package ${package}.${moduleName}.dao;
+package ${packagePath}.dao;
 
 import cn.easybuild.pojo.DataSet;
-import ${package}.${moduleName}.${className}QueryParam;
-import ${package}.${moduleName}.${className};
+import ${packagePath}.${className}QueryParam;
+import ${packagePath}.${className};
 import cn.easybuild.core.dao.StringPojoAppBaseDao;
 
 /**

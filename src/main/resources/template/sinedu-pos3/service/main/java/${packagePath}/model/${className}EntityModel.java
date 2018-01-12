@@ -1,6 +1,6 @@
-package ${package}.${moduleName}.model;
+package ${packagePath}.model;
 
-import ${package}.${moduleName}.${className};
+import ${packagePath}.${className};
 import net.sinedu.foundation.data.jpa.model.EntityModel;
 import java.util.Date;
 #if(${hasBigDecimal})

@@ -1,8 +1,8 @@
-package ${package}.${moduleName}.dao;
+package ${packagePath}.dao;
 
 import cn.easybuild.pojo.DataSet;
-import ${package}.${moduleName}.${className}QueryParam;
-import ${package}.${moduleName}.${className};
+import ${packagePath}.${className}QueryParam;
+import ${packagePath}.${className};
 import net.sinedu.company.bases.dao.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 

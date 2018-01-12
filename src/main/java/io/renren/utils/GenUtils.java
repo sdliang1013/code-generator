@@ -128,7 +128,7 @@ public class GenUtils {
 
 
         map.put("mainPath", mainPath);
-        map.put("package", packageName);
+        map.put("packagePath", packageName);
         map.put("moduleName", modelName);
         map.put("author", config.getString("author"));
         map.put("email", config.getString("email"));
@@ -193,7 +193,7 @@ public class GenUtils {
         String extension = FilenameUtils.getExtension(template);
         return basePath.replace("${className}", className).
                 replace("${classname}", className.toLowerCase()).
-                replace("${package}", packageName).
+                replace("${packagePath}", packageName).
                 replace("${moduleName}", moduleName).
                 replace(".", File.separator) + "." + extension;
     }
@@ -211,9 +211,9 @@ public class GenUtils {
     }
 
     public static void main(String[] args) {
-        String template = "template\\interface\\main\\java\\${package}.${moduleName}.${classname}\\${className}Entity.java";
+        String template = "template\\interface\\main\\java\\${packagePath}\\${className}Entity.java";
         System.out.println(FilenameUtils.getFullPathNoEndSeparator(template));
-        String fileName = getFileName(template, "ShopRole", "net.sinedu.company", "shop");
+        String fileName = getFileName(template, "ShopRole", "net.sinedu.company.shop", "shop");
         System.out.println(fileName);
     }
 }

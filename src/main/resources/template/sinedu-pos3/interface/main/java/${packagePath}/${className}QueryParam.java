@@ -1,4 +1,4 @@
-package ${package}.${moduleName};
+package ${packagePath};
 
 import net.sinedu.company.bases.PagingAdapter;
 import net.sinedu.company.bases.QueryParamAdapter;

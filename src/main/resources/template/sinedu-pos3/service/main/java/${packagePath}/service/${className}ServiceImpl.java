@@ -1,13 +1,13 @@
-package ${package}.${moduleName}.service;
+package ${packagePath}.service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import cn.easybuild.pojo.DataSet;
-import ${package}.${moduleName}.${className}QueryParam;
+import ${packagePath}.${className}QueryParam;
 import cn.easybuild.core.dao.AppBaseDao;
-import ${package}.${moduleName}.dao.${className}Dao;
-import ${package}.${moduleName}.${className};
+import ${packagePath}.dao.${className}Dao;
+import ${packagePath}.${className};
 import net.sinedu.company.bases.service.AbstractBaseServiceImpl;
 
 

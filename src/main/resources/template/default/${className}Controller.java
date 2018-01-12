@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.controller;
+package ${packagePath}.${moduleName}.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import ${package}.${moduleName}.entity.${className}Entity;
-import ${package}.${moduleName}.service.${className}Service;
+import ${packagePath}.${moduleName}.entity.${className}Entity;
+import ${packagePath}.${moduleName}.service.${className}Service;
 import ${mainPath}.common.utils.PageUtils;
 import ${mainPath}.common.utils.Query;
 import ${mainPath}.common.utils.R;

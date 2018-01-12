@@ -1,6 +1,6 @@
-package ${package}.${moduleName}.dao;
+package ${packagePath}.${moduleName}.dao;
 
-import ${package}.${moduleName}.entity.${className}Entity;
+import ${packagePath}.${moduleName}.entity.${className}Entity;
 import ${mainPath}.modules.sys.dao.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
 

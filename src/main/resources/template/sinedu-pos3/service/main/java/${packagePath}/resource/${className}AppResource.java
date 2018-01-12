@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.resource;
+package ${packagePath}.resource;
 
 import cn.easybuild.pojo.DataSet;
 import net.sinedu.company.bases.PagingAdapter;
@@ -7,10 +7,10 @@ import net.sinedu.company.bases.ResponseObjectUtil;
 import net.sinedu.foundation.data.jpa.model.EntityModel;
 import net.sinedu.company.bases.rs.AppBaseResource;
 
-import ${package}.${moduleName}.${className};
-import ${package}.${moduleName}.${className}QueryParam;
-import ${package}.${moduleName}.model.${className}Model;
-import ${package}.${moduleName}.service.${className}Service;
+import ${packagePath}.${className};
+import ${packagePath}.${className}QueryParam;
+import ${packagePath}.model.${className}Model;
+import ${packagePath}.service.${className}Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;

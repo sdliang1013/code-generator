@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${package}.${moduleName}.${className}">
+<mapper namespace="${packagePath}.${className}">
 
     <!-- 可根据自己的需求，是否要使用 -->
     <sql id="tableName">${tableName}</sql>
 
-    <resultMap type="${package}.${moduleName}.${className}" id="${classname}Map">
+    <resultMap type="${packagePath}.${className}" id="${classname}Map">
     #foreach($column in $columns)
     <result property="${column.attrname}" column="${column.columnName}"/>
     #end
     </resultMap>
 
-    <insert id="insert${className}" parameterType="${package}.${moduleName}.${className}">
+    <insert id="insert${className}" parameterType="${packagePath}.${className}">
         insert into
         <include refid="tableName"/>
         (#foreach($column in $columns)#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')`$column.columnName`#if($velocityCount != $columns.size()), #end#end#end)
@@ -20,7 +20,7 @@
         (#foreach($column in $columns)#if($column.columnName != $pk.columnName || $pk.extra != 'auto_increment')#{$column.attrname}#if($velocityCount != $columns.size()), #end#end#end)
     </insert>
 
-    <update id="update${className}" parameterType="${package}.${moduleName}.${className}">
+    <update id="update${className}" parameterType="${packagePath}.${className}">
         update
         <include refid="tableName"/>
         <set>
@@ -48,13 +48,13 @@
         </foreach>
     </delete>
 
-    <select id="get${className}ById" resultType="${package}.${moduleName}.${className}">
+    <select id="get${className}ById" resultType="${packagePath}.${className}">
         select * from
         <include refid="tableName"/>
         where ${pk.columnName} = #{value}
     </select>
 
-    <select id="get${className}ByIds" resultType="${package}.${moduleName}.${className}">
+    <select id="get${className}ByIds" resultType="${packagePath}.${className}">
         select * from
         <include refid="tableName"/>
         where ${pk.columnName} in
@@ -63,7 +63,7 @@
         </foreach>
     </select>
 
-    <select id="query${className}ByParam" resultType="${package}.${moduleName}.${className}">
+    <select id="query${className}ByParam" resultType="${packagePath}.${className}">
         select * from
         <include refid="tableName"/>
         where 1=1

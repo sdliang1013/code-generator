@@ -1,4 +1,4 @@
-package ${package}.${moduleName}.service.impl;
+package ${packagePath}.${moduleName}.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import ${package}.${moduleName}.dao.${className}Dao;
-import ${package}.${moduleName}.entity.${className}Entity;
-import ${package}.${moduleName}.service.${className}Service;
+import ${packagePath}.${moduleName}.dao.${className}Dao;
+import ${packagePath}.${moduleName}.entity.${className}Entity;
+import ${packagePath}.${moduleName}.service.${className}Service;
 
 
 

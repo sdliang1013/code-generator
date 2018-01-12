@@ -1,16 +1,16 @@
-package ${package}.${moduleName}.resource;
+package ${packagePath}.resource;
 
 import cn.easybuild.pojo.DataSet;
 import net.sinedu.company.bases.PagingAdapter;
 import net.sinedu.company.bases.ResponseObject;
 import net.sinedu.company.bases.ResponseObjectUtil;
 import net.sinedu.foundation.data.jpa.model.EntityModel;
-import net.sinedu.company.bases.rs.PosBaseResource;
+import net.sinedu.company.bases.rs.AdminBaseResource;
 
-import ${package}.${moduleName}.${className};
-import ${package}.${moduleName}.${className}QueryParam;
-import ${package}.${moduleName}.model.${className}Model;
-import ${package}.${moduleName}.service.${className}Service;
+import ${packagePath}.${className};
+import ${packagePath}.${className}QueryParam;
+import ${packagePath}.model.${className}Model;
+import ${packagePath}.service.${className}Service;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,10 +28,10 @@ import java.util.List;
  */
 @Named
 @Produces(MediaType.APPLICATION_JSON)
-@Path(${className}PosResource.MODULE_NAME)
-public class ${className}PosResource extends PosBaseResource{
+@Path(${className}SpResource.MODULE_NAME)
+public class ${className}SpResource extends AdminBaseResource{
 
-    public static final String MODULE_NAME = BASE_URI_POS + "/${classname}";
+    public static final String MODULE_NAME = BASE_URI_ADMIN + "/${classname}";
 
     private ${className}Service ${classname}Service;
 
@@ -46,7 +46,7 @@ public class ${className}PosResource extends PosBaseResource{
     @GET
     @Path("/list")
     public ResponseObject list(@BeanParam PagingAdapter pagingAdapter) {
-            ${className}QueryParam queryParam = new ${className}QueryParam(pagingAdapter);
+        ${className}QueryParam queryParam = new ${className}QueryParam(pagingAdapter);
         //TODO:设置查询条件
 
         //查询列表数据
@@ -64,7 +64,7 @@ public class ${className}PosResource extends PosBaseResource{
     @POST
     @Path("/save")
     public ResponseObject save(${className} entity) {
-            ${classname}Service.save(entity);
+        ${classname}Service.save(entity);
         return ResponseObjectUtil.responseWithStandardStatus();
     }
 
@@ -77,7 +77,7 @@ public class ${className}PosResource extends PosBaseResource{
     @POST
     @Path("/update")
     public ResponseObject update(${className} entity) {
-            ${classname}Service.update(entity);
+        ${classname}Service.update(entity);
         return ResponseObjectUtil.responseWithStandardStatus();
     }
 
@@ -87,7 +87,7 @@ public class ${className}PosResource extends PosBaseResource{
     @GET
     @Path("/detail/{id}")
     public ResponseObject detail(@PathParam("id") String id) {
-            ${className}Model entityModel = null;
+        ${className}Model entityModel = null;
         ${className} entity = ${classname}Service.getById(id);
         if (entity != null) {
             entityModel = EntityModel.of(entity,${className}Model.class);
@@ -101,8 +101,12 @@ public class ${className}PosResource extends PosBaseResource{
     @DELETE
     @Path("/delete/{id}")
     public ResponseObject delete(@PathParam("id") String id) {
-            ${classname}Service.deleteById(id);
+        ${classname}Service.deleteById(id);
         return ResponseObjectUtil.responseWithStandardStatus();
     }
 
+    @Override
+    protected boolean isSp() {
+        return true;
+    }
 }
