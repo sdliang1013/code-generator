@@ -1,5 +1,10 @@
-**项目说明** 
-- renren-generator是人人开源项目的代码生成器，可在线生成entity、xml、dao、service、html、js、sql代码，减少70%以上的开发任务
+**项目说明**
+- 代码生成器code-generator，可在线生成entity、xml、dao、service、html、js、sql代码，减少70%以上的开发任务
+- 基于人人网的代码生成器renren-generator，做了如下修改:
+- 1. 修改GenUtil.java, 读取template目录下的所有模板文件
+- 2. 去掉原先模板文件的VM扩展名, 以实际文件的扩展名为准
+- 3. 根据template目录结构生成代码, 不由GenUtil.java指定
+- 4. 将包名, 模块名,表名前缀放到页面上,以便更灵活的生成代码
 <br> 
 
 
